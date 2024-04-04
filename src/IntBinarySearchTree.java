@@ -68,7 +68,14 @@ public class IntBinarySearchTree {
      * @return The node that was manipulated to insert the passed value (Used to update the tree)
      */
     public void add(int x) {
-        root = add(x, root);
+        System.out.println("Attempting to add value: " + x + "...");
+        if (root == null) {
+            System.out.println("No root found! Adding root value: " + x);
+            root = new Node(x);
+        } else {
+            add(x, root);
+
+        } // end if
 
     } // end node
 
@@ -76,55 +83,88 @@ public class IntBinarySearchTree {
      * Inserts a new node to this Binary Search Tree by recursively searching
      * for the first empty root on the correct side of the Tree
      * @param x The value to add to this tree
-     * @param currentRoot The current root being compared against this value
+     * @param currentNode The current root being compared against this value
      * @return The node that
      */
-    public Node add(int x, Node currentRoot) {
+    public Node add(int x, Node currentNode) {
         try {
-            // adds our value to the current root if it's empty
-            if (currentRoot == null) {
-                currentRoot = new Node(x);
-                return currentRoot;
+            if (currentNode == null) {
+                System.out.println("Parent is null, adding parent: " + x);
+                currentNode = new Node(x);
+                return currentNode;
 
             } // end if
 
             // recursively checks if the passed value is less than the current root value before adding it in
-            if (x < currentRoot.value) {
-                return add(x, currentRoot.left);
-            // else if the passed value is greater than the current root value
+            if (x < currentNode.value) {
+                if (currentNode.left == null) {
+                    System.out.println("Left child of value of " + currentNode.value + " is null, adding left child value: " + x);
+                    currentNode.left = new Node(x);
 
-            } else if (x > currentRoot.value) {
-                return add(x, currentRoot.right);
+                } else {
+                    add(x, currentNode.left);
+                    return currentNode.left;
+
+                } // end if
+
+            // else if the passed value is greater than the current root value
+            } else if (x > currentNode.value) {
+                if (currentNode.right == null) {
+                    System.out.println("Right child of " + currentNode.value + " is null, adding right child value: " + x);
+                    currentNode.right = new Node(x);
+
+                } else {
+                    add(x, currentNode.right);
+                    return currentNode.right;
+
+                } // end if
 
             } else {
-                throw new UnsupportedOperationException("Error adding value! Could not compare value " + x + " against " + currentRoot.value);
+                throw new UnsupportedOperationException("Error adding value! Could not compare value " + x + " against " + currentNode.value);
 
             } // end if
 
         } catch (Exception e) {
             // gracefully catches error and prints stack trace info for debugging
             e.printStackTrace();
-            return null;
 
         } // end try
+        return null;
 
     } // end node
 
-    public void print(Node currentNode) {
-            // print in order??
-        System.out.println(currentNode);
-            if (currentNode != null) {
-                print(currentNode.left); // Print left subtree
-                System.out.print(currentNode.value + " "); // Print current node
-                print(currentNode.right); // Print right subtree
 
-            } // end if
+    /**
+     * Removes the passed value from this binary search tree
+     * @param x The value to remove from this BST
+     */
+    public void remove(int x) {
+
 
     } // end void
 
+    /**
+     Prints this binary search tree in order from the lowest -> highest value
+     @param currentNode The node to process/print
+     */
+    private void printInOrder(Node currentNode) {
+        if (currentNode != null) {
+            // recursively works through left subtree (left child -> root -> right child)
+            printInOrder(currentNode.left);
+            // prints the current node value
+            System.out.print(currentNode.value + " ");
+            // recursively works through right subtree (left child -> root -> right child)
+            printInOrder(currentNode.right); // Print right subtree
+
+        } // end if
+
+    } // end node
+
     public void print() {
+        System.out.println("Printing BST in order...");
         // test print fix
-        print(root);
-    }
+        printInOrder(root);
+
+    } // end if
 
 } // end class

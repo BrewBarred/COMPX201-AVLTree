@@ -18,7 +18,7 @@ public class Node {
      * @param rootValue The parent value for this node
      */
     public Node (int rootValue) {
-        int value = rootValue;
+        value = rootValue;
 
     } // end constructor
 
@@ -28,7 +28,7 @@ public class Node {
      * @param leftChild The left-child value for this node
      */
     public Node (int rootValue, Node leftChild) {
-        int value = rootValue;
+        value = rootValue;
         left = leftChild;
 
     } // end constructor
@@ -40,7 +40,7 @@ public class Node {
      * @param rightChild The right-child value for this node
      */
     public Node (int rootValue, Node leftChild, Node rightChild) {
-        int value = rootValue;
+        value = rootValue;
         left = leftChild;
         right = rightChild;
 
