@@ -7,11 +7,11 @@ public class Node {
     /**
      * The node object attached to the left side of this node
      */
-    Node left = null;
+    Node left;
     /**
      * The node object attached to the right side of this node
      */
-    Node right = null;
+    Node right;
 
     /**
      * Constructs a node using the passed root value
@@ -19,30 +19,8 @@ public class Node {
      */
     public Node (int rootValue) {
         value = rootValue;
-
-    } // end constructor
-
-    /**
-     * Constructs a node using the passed root value and left-child value
-     * @param rootValue The parent value for this node
-     * @param leftChild The left-child value for this node
-     */
-    public Node (int rootValue, Node leftChild) {
-        value = rootValue;
-        left = leftChild;
-
-    } // end constructor
-
-    /**
-     * Constructs a node using the passed root value, left-child value and right-child value
-     * @param rootValue The parent value for this node
-     * @param leftChild The left-child value for this node
-     * @param rightChild The right-child value for this node
-     */
-    public Node (int rootValue, Node leftChild, Node rightChild) {
-        value = rootValue;
-        left = leftChild;
-        right = rightChild;
+        left = null;
+        right = null;
 
     } // end constructor
 
