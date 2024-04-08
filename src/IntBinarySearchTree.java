@@ -65,17 +65,10 @@ public class IntBinarySearchTree {
      * @param x The value to insert into this Binary Search Tree
      */
     public void add(int x) {
-        debug("Attempting to add value: " + x + "...");
-        if (root == null) {
-            debug("No root found! Adding root value: " + x);
-            root = new Node(x);
-        } else {
-            add(x, root);
-
-        } // end if
-
+        debug("Attempting to add value " + x + " to the tree...");
+        root = add(x, root);
         debug("The height of the AVL Tree is now: " + getHeight());
-        debug("");
+        print();
 
     } // end node
 
@@ -92,97 +85,76 @@ public class IntBinarySearchTree {
                 debug("Parent is null, adding parent: " + x);
                 currentNode = new Node(x);
 
-            } // end if
+            // if the passed value is less than the current node value, finds a spare slot in the left SubTree for insertion
+            } else if (x < currentNode.value) {
+                currentNode.left = add(x, currentNode.left);
 
-            // recursively checks if the passed value is less than the current root value before adding it in
-            if (x < currentNode.value) {
-                if (currentNode.left == null) {
-                    debug("Left child of value of " + currentNode.value + " is null, adding left child value: " + x);
-                    currentNode.left = new Node(x);
-
-                } else {
-                    add(x, currentNode.left);
-                    currentNode = currentNode.left;
-
-                } // end if
-
-            // else if the passed value is greater than the current root value
-            } else if (x > currentNode.value) {
-                if (currentNode.right == null) {
-                    debug("Right child of " + currentNode.value + " is null, adding right child value: " + x);
-                    currentNode.right = new Node(x);
-
-                } else {
-                    add(x, currentNode.right);
-                    currentNode = currentNode.right;
-
-                } // end if
-
+            // else if the passed value is greater than the current node value, finds a spare slot in the right SubTree for insertion
             } else {
-                System.out.println("Error adding value! Could not compare value " + x + " against " + currentNode.value);
+                currentNode.right = add(x, currentNode.right);
 
             } // end if
 
-            balanceTree(x, currentNode);
-            return currentNode;
+            return balanceTree(x, currentNode);
 
         } catch (Exception e) {
             // gracefully catches error and prints stack trace info for debugging
             e.printStackTrace();
+            return null;
 
         } // end try
-        return null;
 
     } // end node
 
     /**
-     * Checks the balance factor of this tree then balances it if necessary
+     * Checks the balance factor of this tree then balances it if necessary by performing the necessary rotations on it
      * @param x The value most recently inserted into the AVL Tree
      * @param parent The parent of the inserted value
      */
     public Node balanceTree(int x, Node parent) {
         int balanceFactor = getBalanceFactor();
 
-        // returns early if the tree is currently balanced
-        if (balanceFactor <= 1 && balanceFactor >= -1) {
-            debug("This tree is balanced with a balance factor of: " + balanceFactor);
-            return null;
-
-        } // end if
-
-        debug("WARNING: This tree is imbalanced! Attempting to balance...");
-
-        // if the tree is has a left/left-right imbalance
+        // if there is a left-imbalance
         if (balanceFactor > 1) {
-            System.out.println(" x = " + x);
-            System.out.println(" parent.left value = " + parent.left.value);
-            if (x <= parent.left.value) {
-                debug("The tree has a left imbalance! Rotating right...");
+            // rotates right if there's a left imbalance
+            if (x < parent.left.value) {
+                System.out.println("The tree has a left-imbalance!");
                 return rotateRight(parent);
-
-            } else {
-                debug("The tree has a left-right imbalance! Rotating left-right...");
+            // rotates left-right if there's a left-right imbalance
+            } else if (x > parent.left.value) {
+                System.out.println("The tree has a left-Right-imbalance!");
                 return rotateLeftRight(parent);
 
             } // end if
 
-        } // end if
-
-        // if the tree is right/right-left imbalanced
-        else {
-            if (x >= parent.right.value) {
-                debug("The tree has a right imbalance! Rotating left...");
+        // else if there is a right-imbalance
+        } else if (balanceFactor < -1) {
+            // rotates left if there's a right imbalance
+            if (x > parent.right.value) {
+                System.out.println("The tree has a right-imbalance");
                 return rotateLeft(parent);
-
-            } else {
-                debug("The tree has a right-left imbalance! Rotating right-left...");
+            // rotates right-left if there is a right-left-imbalance
+            } else if (x < parent.right.value) {
+                System.out.println("The tree has a right-left-imbalance");
                 return rotateRightLeft(parent);
 
             } // end if
 
+        } else {
+            System.out.println("The tree is balanced with a balance factor of " + balanceFactor);
+
         } // end if
 
-    } // end void
+        return parent;
+
+    } // end Node
+
+    public Node remove(Node currentNode){
+ // Leaf node: simply remove node from tree.
+ // Single Parent: node has only one child, replace the node with its child.
+ // Two Children: node has two subtrees, but which node to replace with? Typically the left-most node of the right subtree
+        return currentNode;
+    } // end node
 
     /**
      * Gets the balance factor of this tree
@@ -233,15 +205,7 @@ public class IntBinarySearchTree {
      * @return The Node that was previously the right child of the passed parent
      */
     public Node rotateLeft(Node parent) {
-        if (parent == null) {
-            System.out.println("Unable to perform left rotation, parent node was null!");
-            return null;
-
-        } // end if
-
-        System.out.println("parent.right = " + parent.right);
-        System.out.println("parent.right = " + parent.right.left);
-        // creates a node to store the right child before it's overridden
+        System.out.println("Rotating left...");
         Node child = parent.right;
         parent.right = child.left;
         child.left = parent;
@@ -255,12 +219,7 @@ public class IntBinarySearchTree {
      * @return The Node that was previously the left child of the passed parent
      */
     public Node rotateRight(Node parent) {
-        if (parent == null) {
-            System.out.println("Unable to perform right rotation, parent node was null!");
-            return null;
-
-        } // end if
-
+        System.out.println("Rotating right...");
         Node child = parent.left;
         parent.left = child.right;
         child.right = parent;
@@ -274,6 +233,7 @@ public class IntBinarySearchTree {
      * @return The Node that was previously the left child of the passed parent
      */
     public Node rotateLeftRight(Node parent) {
+        System.out.println("Rotating left-right...");
         parent.left = rotateLeft(parent.left);
         return rotateRight(parent);
 
@@ -285,6 +245,7 @@ public class IntBinarySearchTree {
      * @return The Node that was previously the right child of the passed parent
      */
     public Node rotateRightLeft(Node parent) {
+        System.out.println("Rotating right-left...");
         parent.right = rotateRight(parent.right);
         return rotateLeft(parent);
 
@@ -328,6 +289,8 @@ public class IntBinarySearchTree {
     public void print() {
         System.out.println("Printing BST in order...");
         printInOrder(root);
+        System.out.println("");
+        StrBSTPrinter.printNode(root);
 
     } // end if
 
